@@ -51,7 +51,7 @@ body {
 .tasks .task {
     background-color: #eee;
     border-radius: 5px;
-    padding-left: 4%;
+    padding-left: 40px;
     height: 60px;
     display: flex;
     align-items: center;
@@ -62,12 +62,6 @@ body {
     cursor: pointer;
 }
 
-@media (max-width: 767px) {
-    .tasks .task {
-        padding-left: 7%;
-    }
-}
-
 .tasks .task::before {
     content: "";
     position: absolute;
@@ -75,7 +69,8 @@ body {
     width: 25px;
     height: 25px;
     border-radius: 50%;
-    left: 1%;
+    margin-right: 20px;
+    left: 10px;
     background-color: #fff;
     cursor: pointer;
 }
