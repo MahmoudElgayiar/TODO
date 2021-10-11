@@ -1,0 +1,97 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    background-color: #eee;
+}
+
+.title {
+    margin-top: 25px;
+}
+
+.form {
+    max-width: 100%;
+    margin: 0;
+}
+.task-text {
+    margin-right: 10px;
+    border-radius: 5px;
+    max-width: 75%;
+}
+
+.add-task {
+    max-width: 25%;
+}
+
+.task-text:focus {
+    outline-color: #007bff;
+}
+
+@media (max-width: 767px) {
+    .task-text {
+        margin-bottom: 10px;
+        margin-right: 0;
+        max-width: 100%;
+    }
+
+    .add-task {
+        max-width: 100%;
+    }
+}
+
+.tasks {
+    background-color: #fff;
+    width: 100%;
+    min-height: 50px;
+    border-radius: 5px;
+    margin: 20px 0 0 0;
+    padding: 15px 15px 2px 15px;
+}
+
+.tasks .task {
+    background-color: #eee;
+    border-radius: 5px;
+    padding-left: 4%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    position: relative;
+    font-weight: bold;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.tasks .task::before {
+    content: "";
+    position: absolute;
+    border: 1px solid;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    left: 1%;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.tasks .task:hover {
+    background-color: #d1caca;
+}
+
+.tasks .task:hover::before {
+    background-color: #000;
+}
+
+.tasks .task span {
+    position: absolute;
+    right: 5%;
+}
+
+.tasks .task.done {
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+
+.tasks .task.done::before {
+    background-color: #000;
+}
