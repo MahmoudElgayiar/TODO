@@ -79,9 +79,9 @@ body {
     background-color: #d1caca;
 }
 
-.tasks .task:hover::before {
+/* .tasks .task:hover::before {
     background-color: #000;
-}
+} */
 
 .tasks .task span {
     position: absolute;
@@ -95,4 +95,8 @@ body {
 
 .tasks .task.done::before {
     background-color: #000;
+}
+
+.delete-all {
+    margin-top: 50px;
 }

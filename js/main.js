@@ -1,6 +1,7 @@
 let input = document.querySelector(".task-text"),
     addButton = document.querySelector(".add-task"),
     tasksDiv = document.querySelector(".tasks"),
+    deleteAll = document.querySelector(".delete-all"),
     tasksArray = [],
     TaskId = tasksArray.length;
 
@@ -13,7 +14,7 @@ if (localStorage.getItem("tasks") !== null) {
 
 //add task on button click
 addButton.onclick = function () {
-    showTasks();
+    showTasks(localStorage.getItem("tasks"));
 };
 
 //Add Task By Pressing Enter
@@ -52,6 +53,9 @@ function addTasksToPage(tasks) {
         //add task to page
         let div = document.createElement("div");
         div.className = "task";
+        if (task.completed) {
+            div.className = "task done";
+        }
         div.setAttribute("data-id", task.id);
         div.appendChild(document.createTextNode(task.title));
         //create Delete button
@@ -61,8 +65,55 @@ function addTasksToPage(tasks) {
         div.appendChild(span);
         //Append Task div to Tasks
         tasksDiv.appendChild(div);
+        deleteAll.removeAttribute("disabled");
     });
 }
 function addTasksToLocalStorage(tasks) {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
+
+//Delete Task
+tasksDiv.addEventListener("click", (e) => {
+    if (e.target.classList.contains("delete")) {
+        deleteTask(e.target.parentElement.dataset.id);
+        e.target.parentElement.remove();
+        if (tasksDiv.innerHTML == "") {
+            deleteAll.setAttribute("disabled", true);
+        }
+    }
+
+    if (e.target.classList.contains("task")) {
+        e.target.classList.toggle("done");
+        markCompleted(e.target.dataset.id);
+    }
+});
+
+//Delete Task From Array And LocalStorage
+function deleteTask(currentTask) {
+    tasksArray = tasksArray.filter((task) => task.id != currentTask);
+    localStorage.setItem("tasks", JSON.stringify(tasksArray));
+}
+
+//Mark Completed And UnCompleted
+function markCompleted(currentTask) {
+    tasksArray.forEach((task) => {
+        if (task.id == currentTask) {
+            task.completed == false
+                ? (task.completed = true)
+                : (task.completed = false);
+        }
+    });
+    localStorage.setItem("tasks", JSON.stringify(tasksArray));
+}
+
+//Delete All Tasks
+deleteAll.onclick = function () {
+    let confirmation = confirm(
+        "You Are Going To Delete All Tasks !! \n Are You Sure ?"
+    );
+    if (confirmation) {
+        localStorage.removeItem("tasks");
+        tasksDiv.innerHTML = "";
+    }
+    deleteAll.setAttribute("disabled", true);
+};
