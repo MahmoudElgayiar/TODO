@@ -1,8 +1,10 @@
 let input = document.querySelector(".task-text"),
     addButton = document.querySelector(".add-task"),
     tasksDiv = document.querySelector(".tasks"),
+    pinnedTasksDiv = document.querySelector(".pinned-tasks"),
     deleteAll = document.querySelector(".delete-all"),
     tasksArray = [],
+    pinnedTasksArray = [],
     TaskId = tasksArray.length;
 
 //get datafrom localStorage
@@ -42,6 +44,7 @@ function addTaskToTasksArray(taskText) {
         id: ID,
         title: taskText,
         completed: false,
+        pinned: false,
     };
     tasksArray.push(task);
 }
@@ -59,10 +62,18 @@ function addTasksToPage(tasks) {
         div.setAttribute("data-id", task.id);
         div.appendChild(document.createTextNode(task.title));
         //create Delete button
-        span = document.createElement("span");
-        span.className = "delete btn btn-danger";
-        span.appendChild(document.createTextNode("Delete"));
-        div.appendChild(span);
+        deleteButton = document.createElement("span");
+        deleteButton.className = "delete btn btn-danger";
+        deleteButton.appendChild(document.createTextNode("Delete"));
+        div.appendChild(deleteButton);
+        //create Pin Button
+        pinButton = document.createElement("span");
+        pinButton.className = "pin btn btn-info";
+        let pinIcon = document.createElement("i");
+        pinIcon.className = "bi bi-pin-angle";
+        pinButton.appendChild(pinIcon);
+        pinButton.appendChild(document.createTextNode(" Pin"));
+        div.appendChild(pinButton);
         //Append Task div to Tasks
         tasksDiv.appendChild(div);
         deleteAll.removeAttribute("disabled");
@@ -85,6 +96,14 @@ tasksDiv.addEventListener("click", (e) => {
     if (e.target.classList.contains("task")) {
         e.target.classList.toggle("done");
         markCompleted(e.target.dataset.id);
+    }
+
+    if (e.target.classList.contains("pin")) {
+        MoveTaskToPinnedArray(e.target.parentElement.dataset.id);
+
+        deleteTask(e.target.parentElement.dataset.id);
+        e.target.parentElement.remove();
+        createpinnedTasks(pinnedTasksArray);
     }
 });
 
@@ -117,3 +136,41 @@ deleteAll.onclick = function () {
     }
     deleteAll.setAttribute("disabled", true);
 };
+
+//Move Pinned
+//Append Task To Pinned Section
+function createpinnedTasks(tasks) {
+    pinnedTasksDiv.innerHTML = "";
+    pinnedTasksArray.forEach((task) => {
+        //add task to page
+        console.log(task);
+        let div = document.createElement("div");
+        div.className = "task pinned";
+        if (task.completed) {
+            div.className = "task done pinned";
+        }
+        div.setAttribute("data-id", task.id);
+        div.appendChild(document.createTextNode(task.title));
+        //create Delete button
+        deleteButton = document.createElement("span");
+        deleteButton.className = "delete btn btn-danger";
+        deleteButton.appendChild(document.createTextNode("Delete"));
+        div.appendChild(deleteButton);
+        //create Pin Button
+        pinButton = document.createElement("span");
+        pinButton.className = "unpin btn btn-info";
+        pinButton.appendChild(document.createTextNode("UnPin"));
+        div.appendChild(pinButton);
+        //Append Task div to Tasks
+        pinnedTasksDiv.appendChild(div);
+    });
+}
+
+function MoveTaskToPinnedArray(pinnedtask) {
+    let newarray = tasksArray.filter((task) => task.id == pinnedtask);
+    pinnedTasksArray = newarray;
+}
+
+function MoveTaskFromPinnedArray(pinnedtask) {
+    pinnedTasksArray = pinnedTasksArray.filter((task) => task.id == pinnedtask);
+}

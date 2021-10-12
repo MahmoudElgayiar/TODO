@@ -7,22 +7,31 @@
         <title>To Do</title>
         <link rel="stylesheet" href="css/normalize.css" />
         <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/bootstrap-icons.css" />
         <link rel="stylesheet" href="css/style.css" />
     </head>
     <body>
         <div class="container">
             <h1 class="title text-center">To Do List</h1>
-            <div class="form text-center row">
+            <div class="row">
                 <input class="col-md-10 task-text" type="text" />
                 <button class="col-md add-task btn btn-primary">
                     Add Task
                 </button>
             </div>
-
-            <button class="btn btn-danger delete-all" disabled>
-                Delete All
-            </button>
-            <div class="tasks text-center"></div>
+            <div class="row d-flex justify-content-end">
+                <button class="btn btn-danger delete-all" disabled>
+                    Delete All
+                </button>
+            </div>
+            <div class="row">
+                <div class="pinned-tasks">
+                    <i class="bi bi-pin-angle"></i>
+                </div>
+            </div>
+            <div class="row">
+                <div class="tasks text-center"></div>
+            </div>
         </div>
         <script src="js/jquery-3.6.0.min.js"></script>
         <script src="js/popper.min.js"></script>

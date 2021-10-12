@@ -39,6 +39,23 @@ body {
     }
 }
 
+.pinned-tasks {
+    background-color: #fff;
+    width: 100%;
+    min-height: 50px;
+    border-radius: 5px;
+    margin: 20px 0 0 0;
+    padding: 15px 15px 2px 15px;
+    position: relative;
+}
+.pinned-tasks i {
+    position: absolute;
+    top: -30px;
+    left: -15px;
+    font-size: 35px;
+    transform: rotateY(180deg);
+}
+
 .tasks {
     background-color: #fff;
     width: 100%;
@@ -48,7 +65,8 @@ body {
     padding: 15px 15px 2px 15px;
 }
 
-.tasks .task {
+.tasks .task,
+.pinned-tasks .task {
     background-color: #eee;
     border-radius: 5px;
     padding-left: 40px;
@@ -62,7 +80,8 @@ body {
     cursor: pointer;
 }
 
-.tasks .task::before {
+.tasks .task::before,
+.pinned-tasks .task::before {
     content: "";
     position: absolute;
     border: 1px solid;
@@ -75,7 +94,8 @@ body {
     cursor: pointer;
 }
 
-.tasks .task:hover {
+.tasks .task:hover,
+.pinned-tasks .task:hover {
     background-color: #d1caca;
 }
 
@@ -83,9 +103,24 @@ body {
     background-color: #000;
 } */
 
-.tasks .task span {
+.tasks .task .delete,
+.pinned-tasks .task .delete {
     position: absolute;
-    right: 5%;
+    right: 25px;
+}
+
+.tasks .task .pin,
+.pinned-tasks .task .unpin {
+    position: absolute;
+    right: 105px;
+}
+
+.pinned-tasks .task.pinned {
+    background-color: #c6dfbf;
+}
+
+.pinned-tasks .task.pinned:hover {
+    background-color: #e2ffda;
 }
 
 .tasks .task.done {
