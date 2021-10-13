@@ -11,7 +11,21 @@ let input = document.querySelector(".task-text"),
 if (localStorage.getItem("tasks") !== null) {
     tasksArray = JSON.parse(localStorage.getItem("tasks"));
     TaskId = tasksArray.length;
-    addTasksToPage(tasksArray);
+    tasksArray.forEach((task) => {
+        if (task.pinned) {
+            pinTasks(PinnedTasks());
+        } else {
+            addTasksToPage(OrdinaryTasks());
+        }
+    });
+}
+
+function PinnedTasks() {
+    return tasksArray.filter((task) => task.pinned);
+}
+
+function OrdinaryTasks() {
+    return tasksArray.filter((task) => !task.pinned);
 }
 
 //add task on button click
@@ -52,28 +66,8 @@ function addTaskToTasksArray(taskText) {
 //Append Task To Page
 function addTasksToPage(tasks) {
     tasksDiv.innerHTML = "";
-    tasksArray.forEach((task) => {
-        if (task.pinned) {
-            let div = document.createElement("div");
-            div.className = "task pinned";
-            if (task.completed) {
-                div.className = "task done pinned";
-            }
-            div.setAttribute("data-id", task.id);
-            div.appendChild(document.createTextNode(task.title));
-            //create Delete button
-            deleteButton = document.createElement("span");
-            deleteButton.className = "delete btn btn-danger";
-            deleteButton.appendChild(document.createTextNode("Delete"));
-            div.appendChild(deleteButton);
-            //create Pin Button
-            pinButton = document.createElement("span");
-            pinButton.className = "unpin btn btn-info";
-            pinButton.appendChild(document.createTextNode("UnPin"));
-            div.appendChild(pinButton);
-            //Append Task div to Tasks
-            pinnedTasksDiv.appendChild(div);
-        }
+    let Ordinarytasks = OrdinaryTasks();
+    Ordinarytasks.forEach((task) => {
         //add task to page
         let div = document.createElement("div");
         div.className = "task";
@@ -97,9 +91,36 @@ function addTasksToPage(tasks) {
         div.appendChild(pinButton);
         //Append Task div to Tasks
         tasksDiv.appendChild(div);
-        deleteAll.removeAttribute("disabled");
+    });
+    deleteAll.removeAttribute("disabled");
+}
+
+function pinTasks(tasks) {
+    pinnedTasksDiv.innerHTML = "";
+    let pinnedOnly = PinnedTasks();
+    pinnedOnly.forEach((task) => {
+        let div = document.createElement("div");
+        div.className = "task pinned";
+        if (task.completed) {
+            div.className = "task done pinned";
+        }
+        div.setAttribute("data-id", task.id);
+        div.appendChild(document.createTextNode(task.title));
+        //create Delete button
+        deleteButton = document.createElement("span");
+        deleteButton.className = "delete btn btn-danger";
+        deleteButton.appendChild(document.createTextNode("Delete"));
+        div.appendChild(deleteButton);
+        //create Pin Button
+        pinButton = document.createElement("span");
+        pinButton.className = "unpin btn btn-info";
+        pinButton.appendChild(document.createTextNode("UnPin"));
+        div.appendChild(pinButton);
+        //Append Task div to Tasks
+        pinnedTasksDiv.appendChild(div);
     });
 }
+
 function addTasksToLocalStorage(tasks) {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
@@ -109,7 +130,7 @@ tasksDiv.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete")) {
         deleteTask(e.target.parentElement.dataset.id);
         e.target.parentElement.remove();
-        if (tasksDiv.innerHTML == "") {
+        if (tasksDiv.innerHTML == "" && pinnedTasksDiv.innerHTML == "") {
             deleteAll.setAttribute("disabled", true);
         }
     }
@@ -121,7 +142,7 @@ tasksDiv.addEventListener("click", (e) => {
 
     if (e.target.classList.contains("pin")) {
         markPinned(e.target.parentElement.dataset.id);
-        addTasksToPage(tasksArray);
+        pinTasks(tasksArray, e.target.parentElement.dataset.id);
         e.target.parentElement.remove();
     }
 });
@@ -132,12 +153,6 @@ function deleteTask(currentTask) {
     localStorage.setItem("tasks", JSON.stringify(tasksArray));
 }
 
-// function deletePinnedTask(currentTask) {
-//     pinnedTasksArray = pinnedTasksArray.filter(
-//         (task) => task.id != currentTask
-//     );
-// }
-
 //Mark Completed And UnCompleted
 function markCompleted(currentTask) {
     tasksArray.forEach((task) => {
@@ -147,7 +162,7 @@ function markCompleted(currentTask) {
                 : (task.completed = false);
         }
     });
-    localStorage.setItem("tasks", JSON.stringify(tasksArray));
+    addTasksToLocalStorage(tasksArray);
 }
 
 function markPinned(currentTask) {
@@ -156,7 +171,7 @@ function markPinned(currentTask) {
             task.pinned == false ? (task.pinned = true) : (task.pinned = false);
         }
     });
-    localStorage.setItem("tasks", JSON.stringify(tasksArray));
+    addTasksToLocalStorage(tasksArray);
 }
 
 //Delete All Tasks
@@ -167,29 +182,10 @@ deleteAll.onclick = function () {
     if (confirmation) {
         localStorage.removeItem("tasks");
         tasksDiv.innerHTML = "";
+        pinnedTasksDiv.innerHTML = "";
     }
     deleteAll.setAttribute("disabled", true);
 };
-
-//Move Pinned
-//Append Task To Pinned Section
-// function createpinnedTasks(tasks) {
-//     pinnedTasksDiv.innerHTML = "";
-//     tasksArray.forEach((task) => {
-//         //add task to page
-//     });
-// }
-
-// function MoveTaskToPinnedArray(pinnedtask) {
-//     let newarray = tasksArray.filter((task) => task.id == pinnedtask);
-//     pinnedTasksArray = newarray;
-// }
-
-// function MoveTaskFromPinnedArray(pinnedtask) {
-//     pinnedTasksArray = pinnedTasksArray.filter((task) => task.id == pinnedtask);
-//     tasksArray.concat(pinnedTasksArray);
-//     localStorage.setItem("tasks", JSON.stringify(tasksArray));
-// }
 
 pinnedTasksDiv.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete")) {
@@ -203,9 +199,9 @@ pinnedTasksDiv.addEventListener("click", (e) => {
     }
 
     if (e.target.classList.contains("unpin")) {
-        MoveTaskFromPinnedArray(e.target.parentElement.dataset.id);
+        markPinned(e.target.parentElement.dataset.id);
         e.target.parentElement.remove();
-        showTasks(tasksArray);
-        localStorage.setItem("tasks", JSON.stringify(tasksArray));
+        addTasksToPage(tasksArray);
+        addTasksToLocalStorage(tasksArray);
     }
 });

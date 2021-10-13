@@ -115,6 +115,10 @@ body {
     right: 105px;
 }
 
+.tasks .task .pin i {
+    pointer-events: none;
+}
+
 .pinned-tasks .task.pinned {
     background-color: #c6dfbf;
 }
@@ -123,12 +127,14 @@ body {
     background-color: #e2ffda;
 }
 
-.tasks .task.done {
+.tasks .task.done,
+.pinned-tasks .task.done {
     text-decoration: line-through;
     opacity: 0.5;
 }
 
-.tasks .task.done::before {
+.tasks .task.done::before,
+.pinned-tasks .task.done::before {
     background-color: #000;
 }
 
