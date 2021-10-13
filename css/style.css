@@ -48,12 +48,17 @@ body {
     padding: 15px 15px 2px 15px;
     position: relative;
 }
-.pinned-tasks i {
+
+.pinned-section {
+    position: relative;
+}
+.pinned-section i {
     position: absolute;
-    top: -30px;
-    left: -15px;
+    top: -15px;
+    left: -25px;
     font-size: 35px;
     transform: rotateY(180deg);
+    z-index: 2;
 }
 
 .tasks {
