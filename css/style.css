@@ -153,7 +153,7 @@ body {
     }
 
     .tasks .task .delete,
-    .pinned-tasks .task .delete,
+    .pinned-tasks .task .unpin,
     .tasks .task .pin,
     .pinned-tasks .task .delete {
         transform: scale(0.6);
