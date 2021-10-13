@@ -149,7 +149,7 @@ body {
 
 @media (max-width: 576px) {
     .container {
-        max-width: 80%;
+        max-width: 85%;
     }
 
     .tasks .task .delete,
