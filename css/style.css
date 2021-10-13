@@ -151,4 +151,52 @@ body {
     .container {
         max-width: 80%;
     }
+
+    .tasks .task .delete,
+    .pinned-tasks .task .delete,
+    .tasks .task .pin,
+    .pinned-tasks .task .delete {
+        transform: scale(0.6);
+    }
+
+    .tasks .task .delete,
+    .pinned-tasks .task .delete {
+        position: absolute;
+        right: -6px;
+    }
+
+    .tasks .task .pin,
+    .pinned-tasks .task .unpin {
+        position: absolute;
+        right: 42px;
+    }
+
+    .tasks .task::before,
+    .pinned-tasks .task::before {
+        content: "";
+        position: absolute;
+        border: 1px solid;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-right: 15px;
+        left: 10px;
+        background-color: #fff;
+        cursor: pointer;
+    }
+
+    .tasks .task,
+    .pinned-tasks .task {
+        background-color: #eee;
+        border-radius: 5px;
+        padding-left: 30px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        margin: 0 auto;
+        position: relative;
+        font-weight: bold;
+        margin-bottom: 15px;
+        cursor: pointer;
+    }
 }
