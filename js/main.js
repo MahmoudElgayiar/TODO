@@ -20,10 +20,12 @@ if (localStorage.getItem("tasks") !== null) {
     });
 }
 
+//Filter Main Tasks Array To Only Contain Pinned Tasks
 function PinnedTasks() {
     return tasksArray.filter((task) => task.pinned);
 }
 
+//Filter Main Tasks Array To Only Contain Ordinary Tasks
 function OrdinaryTasks() {
     return tasksArray.filter((task) => !task.pinned);
 }
@@ -95,6 +97,7 @@ function addTasksToPage(tasks) {
     deleteAll.removeAttribute("disabled");
 }
 
+//Write Pinned Task To Page
 function pinTasks(tasks) {
     pinnedTasksDiv.innerHTML = "";
     let pinnedOnly = PinnedTasks();
@@ -121,11 +124,12 @@ function pinTasks(tasks) {
     });
 }
 
+//Add Tasks To Local Storage
 function addTasksToLocalStorage(tasks) {
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
-//Delete Task
+//buttons on Ordinary Tasks
 tasksDiv.addEventListener("click", (e) => {
     if (e.target.classList.contains("delete")) {
         deleteTask(e.target.parentElement.dataset.id);
@@ -150,7 +154,7 @@ tasksDiv.addEventListener("click", (e) => {
 //Delete Task From Array And LocalStorage
 function deleteTask(currentTask) {
     tasksArray = tasksArray.filter((task) => task.id != currentTask);
-    localStorage.setItem("tasks", JSON.stringify(tasksArray));
+    addTasksToLocalStorage(tasksArray);
 }
 
 //Mark Completed And UnCompleted
@@ -165,6 +169,7 @@ function markCompleted(currentTask) {
     addTasksToLocalStorage(tasksArray);
 }
 
+//Mark Task As Pinned And Update LocalStorage Values
 function markPinned(currentTask) {
     tasksArray.forEach((task) => {
         if (task.id == currentTask) {
