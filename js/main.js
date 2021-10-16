@@ -155,6 +155,9 @@ tasksDiv.addEventListener("click", (e) => {
     if (e.target.classList.contains("task")) {
         e.target.classList.toggle("done");
         markCompleted(e.target.dataset.id);
+        if (show_hide_tasks.checked) {
+            e.target.remove();
+        }
     }
 
     if (e.target.classList.contains("pin")) {
@@ -183,6 +186,11 @@ function markCompleted(currentTask) {
                 : (task.completed = false);
         }
     });
+    if (
+        tasksArray.length !== JSON.parse(localStorage.getItem("tasks")).length
+    ) {
+        tasksArray = tasksArray.concat(hiddenTasks());
+    }
     addTasksToLocalStorage(tasksArray);
 }
 
