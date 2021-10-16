@@ -61,11 +61,13 @@ function showTasks() {
         addTaskToTasksArray(input.value);
         input.value = "";
         addTasksToPage(tasksArray);
-        if (
-            tasksArray.length !==
-            JSON.parse(localStorage.getItem("tasks")).length
-        ) {
-            tasksArray = tasksArray.concat(hiddenTasks());
+        if (localStorage.getItem("tasks") !== null) {
+            if (
+                tasksArray.length !==
+                JSON.parse(localStorage.getItem("tasks")).length
+            ) {
+                tasksArray = tasksArray.concat(hiddenTasks());
+            }
         }
         addTasksToLocalStorage(tasksArray);
         input.focus();
