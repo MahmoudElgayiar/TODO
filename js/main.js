@@ -14,9 +14,9 @@ if (localStorage.getItem("tasks") !== null) {
     TaskId = tasksArray.length;
     tasksArray.forEach((task) => {
         if (task.pinned) {
-            pinTasks(PinnedTasks());
+            pinTasks(PinnedTasks(tasksArray));
         } else {
-            addTasksToPage(OrdinaryTasks());
+            addTasksToPage(OrdinaryTasks(tasksArray));
         }
     });
 }
@@ -34,13 +34,13 @@ if (localStorage.getItem("hide-completed") !== null) {
 }
 
 //Filter Main Tasks Array To Only Contain Pinned Tasks
-function PinnedTasks() {
-    return tasksArray.filter((task) => task.pinned);
+function PinnedTasks(tasks) {
+    return tasks.filter((task) => task.pinned);
 }
 
 //Filter Main Tasks Array To Only Contain Ordinary Tasks
-function OrdinaryTasks() {
-    return tasksArray.filter((task) => !task.pinned);
+function OrdinaryTasks(tasks) {
+    return tasks.filter((task) => !task.pinned);
 }
 
 //add task on button click
@@ -81,7 +81,7 @@ function addTaskToTasksArray(taskText) {
 //Append Task To Page
 function addTasksToPage(tasks) {
     tasksDiv.innerHTML = "";
-    let Ordinarytasks = OrdinaryTasks();
+    let Ordinarytasks = OrdinaryTasks(tasks);
     Ordinarytasks.forEach((task) => {
         //add task to page
         let div = document.createElement("div");
@@ -113,7 +113,7 @@ function addTasksToPage(tasks) {
 //Write Pinned Task To Page
 function pinTasks(tasks) {
     pinnedTasksDiv.innerHTML = "";
-    let pinnedOnly = PinnedTasks();
+    let pinnedOnly = PinnedTasks(tasks);
     pinnedOnly.forEach((task) => {
         let div = document.createElement("div");
         div.className = "task pinned";
@@ -262,8 +262,6 @@ function showHideCompletedTasks(checkbox) {
             addTasksToPage(tasksArray);
             pinTasks(tasksArray);
             localStorage.setItem("hide-completed", "true");
-            console.log(hiddenTasks());
-
             break;
 
         case false:
@@ -280,3 +278,17 @@ function hiddenTasks() {
     let allTasks = JSON.parse(localStorage.getItem("tasks"));
     return allTasks.filter((task) => task.completed);
 }
+
+document.querySelector(".filter-tasks").addEventListener("input", function (e) {
+    tasksDiv.innerHTML = "";
+    pinnedTasksDiv.innerHTML = "";
+    let filteredArray = [];
+    debugger;
+    tasksArray.forEach((task) => {
+        if (task.title.toLowerCase().includes(e.target.value.toLowerCase())) {
+            filteredArray.push(task);
+        }
+    });
+    addTasksToPage(filteredArray);
+    pinTasks(filteredArray);
+});
