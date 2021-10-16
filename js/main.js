@@ -283,7 +283,6 @@ document.querySelector(".filter-tasks").addEventListener("input", function (e) {
     tasksDiv.innerHTML = "";
     pinnedTasksDiv.innerHTML = "";
     let filteredArray = [];
-    debugger;
     tasksArray.forEach((task) => {
         if (task.title.toLowerCase().includes(e.target.value.toLowerCase())) {
             filteredArray.push(task);
