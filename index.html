@@ -19,7 +19,34 @@
                     Add Task
                 </button>
             </div>
-            <div class="row d-flex justify-content-end">
+            <div
+                class="
+                    row
+                    d-flex
+                    justify-content-between
+                    align-items-baseline
+                    mt-5
+                    pl-5
+                    control-tasks
+                "
+            >
+                <div>
+                    <input
+                        type="text"
+                        class="filter-tasks mr-5"
+                        name="filter-tasks"
+                        id="filter-tasks"
+                        placeholder="Filter Tasks"
+                    />
+                    <input
+                        type="checkbox"
+                        class="show-hide-tasks"
+                        name="show-hide-tasks"
+                        id="show-hide-tasks"
+                        for="show-hide-label"
+                    />
+                    <label for="show-hide-tasks">Hide Completed Tasks</label>
+                </div>
                 <button class="btn btn-danger delete-all" disabled>
                     Delete All
                 </button>

@@ -3,8 +3,9 @@ let input = document.querySelector(".task-text"),
     tasksDiv = document.querySelector(".tasks"),
     pinnedTasksDiv = document.querySelector(".pinned-tasks"),
     deleteAll = document.querySelector(".delete-all"),
+    show_hide_tasks = document.querySelector(".show-hide-tasks"),
     tasksArray = [],
-    pinnedTasksArray = [],
+    completedTasks = [],
     TaskId = tasksArray.length;
 
 //get datafrom localStorage
@@ -18,6 +19,18 @@ if (localStorage.getItem("tasks") !== null) {
             addTasksToPage(OrdinaryTasks());
         }
     });
+}
+if (localStorage.getItem("hide-completed") !== null) {
+    switch (localStorage.getItem("hide-completed")) {
+        case "true":
+            show_hide_tasks.checked = true;
+            showHideCompletedTasks(show_hide_tasks);
+            break;
+
+        case "false":
+            show_hide_tasks.checked = false;
+            break;
+    }
 }
 
 //Filter Main Tasks Array To Only Contain Pinned Tasks
@@ -146,7 +159,11 @@ tasksDiv.addEventListener("click", (e) => {
 
     if (e.target.classList.contains("pin")) {
         markPinned(e.target.parentElement.dataset.id);
-        pinTasks(tasksArray, e.target.parentElement.dataset.id);
+        if (show_hide_tasks.checked) {
+            showHideCompletedTasks(show_hide_tasks);
+        } else {
+            pinTasks(tasksArray);
+        }
         e.target.parentElement.remove();
     }
 });
@@ -176,6 +193,12 @@ function markPinned(currentTask) {
             task.pinned == false ? (task.pinned = true) : (task.pinned = false);
         }
     });
+    if (
+        tasksArray.length !== JSON.parse(localStorage.getItem("tasks")).length
+    ) {
+        tasksArray = tasksArray.concat(hiddenTasks());
+    }
+
     addTasksToLocalStorage(tasksArray);
 }
 
@@ -206,7 +229,54 @@ pinnedTasksDiv.addEventListener("click", (e) => {
     if (e.target.classList.contains("unpin")) {
         markPinned(e.target.parentElement.dataset.id);
         e.target.parentElement.remove();
-        addTasksToPage(tasksArray);
+        if (show_hide_tasks.checked) {
+            showHideCompletedTasks(show_hide_tasks);
+        } else {
+            addTasksToPage(tasksArray);
+            pinTasks(tasksArray);
+        }
+        if (
+            tasksArray.length !==
+            JSON.parse(localStorage.getItem("tasks")).length
+        ) {
+            tasksArray = tasksArray.concat(hiddenTasks());
+        }
         addTasksToLocalStorage(tasksArray);
     }
 });
+
+document
+    .querySelector(".show-hide-tasks")
+    .addEventListener("change", function (e) {
+        showHideCompletedTasks(e.target);
+    });
+
+function showHideCompletedTasks(checkbox) {
+    switch (checkbox.checked) {
+        case true:
+            tasksDiv.innerHTML = "";
+            pinnedTasksDiv.innerHTML = "";
+            tasksArray = tasksArray.filter(
+                (task) => !task.completed || (task.pinned && !task.completed)
+            );
+            addTasksToPage(tasksArray);
+            pinTasks(tasksArray);
+            localStorage.setItem("hide-completed", "true");
+            console.log(hiddenTasks());
+
+            break;
+
+        case false:
+            tasksArray = JSON.parse(localStorage.getItem("tasks"));
+            tasksDiv.innerHTML = "";
+            pinTasks(tasksArray);
+            addTasksToPage(tasksArray);
+            localStorage.setItem("hide-completed", "false");
+            break;
+    }
+}
+
+function hiddenTasks() {
+    let allTasks = JSON.parse(localStorage.getItem("tasks"));
+    return allTasks.filter((task) => task.completed);
+}

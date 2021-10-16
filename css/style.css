@@ -143,9 +143,9 @@ body {
     background-color: #000;
 }
 
-.delete-all {
+/* .delete-all {
     margin-top: 50px;
-}
+} */
 
 @media (max-width: 576px) {
     .container {
@@ -199,4 +199,29 @@ body {
         margin-bottom: 15px;
         cursor: pointer;
     }
+}
+
+.control-tasks {
+    position: relative;
+}
+
+.control-tasks input:nth-child(1) {
+    width: 350px;
+    height: 35px;
+    border: initial;
+    padding-left: 15px;
+    font-size: 1.1rem;
+    outline-color: #007bff;
+}
+
+.control-tasks input[type="checkbox"] {
+    position: absolute;
+    top: 5px;
+    left: 420px;
+    width: 25px;
+    height: 25px;
+}
+
+.control-tasks > div label {
+    font-weight: bold;
 }
